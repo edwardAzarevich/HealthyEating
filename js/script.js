@@ -1,14 +1,16 @@
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', function () {
+
     // Tabs
-    const tabs = document.querySelectorAll('.tabheader__item'),
+
+    let tabs = document.querySelectorAll('.tabheader__item'),
         tabsContent = document.querySelectorAll('.tabcontent'),
         tabsParent = document.querySelector('.tabheader__items');
 
-    function hideTGabContent() {
+    function hideTabContent() {
+
         tabsContent.forEach(item => {
             item.classList.add('hide');
             item.classList.remove('show', 'fade');
-
         });
 
         tabs.forEach(item => {
@@ -20,18 +22,17 @@ window.addEventListener('DOMContentLoaded', () => {
         tabsContent[i].classList.add('show', 'fade');
         tabsContent[i].classList.remove('hide');
         tabs[i].classList.add('tabheader__item_active');
-        console.log('ok');
     }
 
-    hideTGabContent();
+    hideTabContent();
     showTabContent();
-    tabsParent.addEventListener('click', (event) => {
-        const target = event.target;
 
+    tabsParent.addEventListener('click', function (event) {
+        const target = event.target;
         if (target && target.classList.contains('tabheader__item')) {
             tabs.forEach((item, i) => {
                 if (target == item) {
-                    hideTGabContent();
+                    hideTabContent();
                     showTabContent(i);
                 }
             });
@@ -39,7 +40,6 @@ window.addEventListener('DOMContentLoaded', () => {
     });
 
     // Timer
-
     const deadline = '2022-10-30';
 
     function getTimeremaining(endtime) {
@@ -103,75 +103,64 @@ window.addEventListener('DOMContentLoaded', () => {
 
     setClock('.timer', deadline);
 
-    // Modal window
-
+    // Modal
 
     const modalTrigger = document.querySelectorAll('[data-modal]'),
         modal = document.querySelector('.modal'),
-        modalClose = document.querySelector('[data-close]'),
-        test = document.querySelector('.header__link');
+        modalCloseBtn = document.querySelector('[data-close]');
 
     modalTrigger.forEach(btn => {
-        btn.addEventListener('click', () => {
-            modal.classList.toggle('show');
-            document.body.style.overflow = 'hidden';
-        });
+        btn.addEventListener('click', openModal);
     });
 
-    function openModel() {
-        modal.classList.toggle('show');
-        document.body.style.overflow = 'hidden';
-        clearInterval(modelTimerId);
-    }
-
-    function closeModel() {
-        modal.classList.toggle('show');
+    function closeModal() {
+        modal.classList.add('hide');
+        modal.classList.remove('show');
         document.body.style.overflow = '';
     }
 
-    modalClose.addEventListener('click', closeModel);
+    function openModal() {
+        modal.classList.add('show');
+        modal.classList.remove('hide');
+        document.body.style.overflow = 'hidden';
+        clearInterval(modalTimerId);
+    }
+
+    modalCloseBtn.addEventListener('click', closeModal);
 
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
-            closeModel();
-        };
+            closeModal();
+        }
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.code === 'Escape' && modal.classList.contains('show')) {
-            closeModel();
+        if (e.code === "Escape" && modal.classList.contains('show')) {
+            closeModal();
         }
     });
 
-    //const modelTimerId = setTimeout(openModel, 10000);
+    const modalTimerId = setTimeout(openModal, 300000);
+    // Изменил значение, чтобы не отвлекало
 
-    // skroll 
-    function showModelByScroll() {
-        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight - 1) {
-            openModel();
-            window.removeEventListener('scroll', showModelByScroll);
+    function showModalByScroll() {
+        if (window.pageYOffset + document.documentElement.clientHeight >= document.documentElement.scrollHeight) {
+            openModal();
+            window.removeEventListener('scroll', showModalByScroll);
         }
-
     }
+    window.addEventListener('scroll', showModalByScroll);
 
-    window.addEventListener('scroll', showModelByScroll);
-
-
-    // Create Menu 
-    const params = {
-        nameMenu: "Фитнес",
-        text: "hi man",
-        price: 229
-    };
-    // Use class for card
+    // Используем классы для создание карточек меню
 
     class MenuCard {
-        constructor(src, alt, title, descr, price, parentSelector) {
+        constructor(src, alt, title, descr, price, parentSelector, ...classes) {
             this.src = src;
             this.alt = alt;
             this.title = title;
             this.descr = descr;
             this.price = price;
+            this.classes = classes;
             this.parent = document.querySelector(parentSelector);
             this.transfer = 27;
             this.changeToUAH();
@@ -183,22 +172,27 @@ window.addEventListener('DOMContentLoaded', () => {
 
         render() {
             const element = document.createElement('div');
+
+            if (this.classes.length === 0) {
+                this.classes = "menu__item";
+                element.classList.add(this.classes);
+            } else {
+                this.classes.forEach(className => element.classList.add(className));
+            }
+
             element.innerHTML = `
-        <div class="menu__item">
-                    <img src=${this.src} alt=${this.alt}>
-                    <h3 class="menu__item-subtitle">${this.title}</h3>
-                    <div class="menu__item-descr">${this.descr}</div>
-                    <div class="menu__item-divider"></div>
-                    <div class="menu__item-price">
-                        <div class="menu__item-cost">Цена:</div>
-                        <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
-                    </div>
+                <img src=${this.src} alt=${this.alt}>
+                <h3 class="menu__item-subtitle">${this.title}</h3>
+                <div class="menu__item-descr">${this.descr}</div>
+                <div class="menu__item-divider"></div>
+                <div class="menu__item-price">
+                    <div class="menu__item-cost">Цена:</div>
+                    <div class="menu__item-total"><span>${this.price}</span> грн/день</div>
                 </div>
-        `;
+            `;
             this.parent.append(element);
         }
-    };
-
+    }
 
     new MenuCard(
         "img/tabs/vegy.jpg",
@@ -227,70 +221,53 @@ window.addEventListener('DOMContentLoaded', () => {
         ".menu .container"
     ).render();
 
+    // Forms
 
-    // My code
+    const forms = document.querySelectorAll('form');
+    const message = {
+        loading: 'Загрузка...',
+        success: 'Спасибо! Скоро мы с вами свяжемся',
+        failure: 'Что-то пошло не так...'
+    };
 
-    /*class FormMenuItem {
-        constructor(cardItem) {
-            this.pathPhoto = cardItem.path;
-            this.nameMenu = cardItem.name;
-            this.text = cardItem.text;
-            this.price = cardItem.price;
-        }
-
-        createDivElement() {
-            const divMenuItem = document.createElement('div');
-            const divMenuItemPrice = document.createElement('div');
-            divMenuItem.classList = "menu__item";
-            divMenuItem.innerHTML += `<img src="${this.pathPhoto}" alt="vegy">`;
-            divMenuItem.innerHTML += `<h3 class="menu__item-subtitle">Меню "${this.nameMenu}"</h3>`;
-            divMenuItem.innerHTML += `<div class="menu__item-descr">Меню ${this.nameMenu}" - "${this.text}"</div>`;
-            divMenuItem.innerHTML += `<div class="menu__item-divider"></div>`;
-
-            divMenuItemPrice.classList = "menu__item-price";
-            divMenuItemPrice.innerHTML += `<div class="menu__item-cost">Цена:</div>`;
-            divMenuItemPrice.innerHTML += `<div class="menu__item-total"><span>${this.price}</span> грн/день</div>`;
-
-            divMenuItem.append(divMenuItemPrice);
-            return divMenuItem;
-        }
-
-    }
-
-    const CardList = [
-        {
-            name: "Фитнес",
-            path: "img/tabs/vegy.jpg",
-            text: 'это новый подход к приготовлению блюд:больше свежиховощей и фруктов. Продукт активных и здоровых людей. Это абсолютно новый продукт с оптимальнойценой и высоким качеством',
-            price: 229
-        },
-        {
-            name: "Премиум",
-            path: "img/tabs/elite.jpg",
-            text: "мы используем не только красивый дизайн упаковки, нои качественное исполнение блюд. Красная рыба, морепродукты, фрукты - ресторанное меню без походав ресторан!",
-            price: 550
-        },
-        {
-            name: "Постное",
-            path: "img/tabs/post.jpg",
-            text: "это тщательный подбор ингредиентов: полное отсутствиепродуктов животного происхождения, молоко из миндаля, овса, кокоса или гречки, правильноеколичество белков за счет тофу и импортных вегетарианских стейков.",
-            price: 430
-        },
-
-
-
-    ];
-
-    const devMenuList = document.querySelector('.menu .menu__field .container');
-
-    CardList.forEach(element => {
-        devMenuList.append(new FormMenuItem(element).createDivElement());
-
-
+    forms.forEach(item => {
+        postData(item);
     });
 
-*/
+    function postData(form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
 
+            let statusMessage = document.createElement('div');
+            statusMessage.classList.add('status');
+            statusMessage.textContent = message.loading;
+            form.appendChild(statusMessage);
+
+            const request = new XMLHttpRequest();
+            request.open('POST', 'server.php');
+            request.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+            const formData = new FormData(form);
+
+            const object = {};
+            formData.forEach(function (value, key) {
+                object[key] = value;
+            });
+            const json = JSON.stringify(object);
+
+            request.send(json);
+
+            request.addEventListener('load', () => {
+                if (request.status === 200) {
+                    console.log(request.response);
+                    statusMessage.textContent = message.success;
+                    form.reset();
+                    setTimeout(() => {
+                        statusMessage.remove();
+                    }, 2000);
+                } else {
+                    statusMessage.textContent = message.failure;
+                }
+            });
+        });
+    }
 });
-
-
