@@ -193,6 +193,17 @@ window.addEventListener('DOMContentLoaded', function () {
             this.parent.append(element);
         }
     }
+    
+    const getResourse = async (url) => {
+        const res = await this.fetch(url);
+
+        if (!res.ok) {
+            throw new Error(`Could bot fetch ${url}, status: ${res.status}`);
+        };
+
+        return await res.json();
+    };
+
 
     new MenuCard(
         "img/tabs/vegy.jpg",
@@ -231,10 +242,24 @@ window.addEventListener('DOMContentLoaded', function () {
     };
 
     forms.forEach(item => {
-        postData(item);
+        bindPostData(item);
     });
 
-    function postData(form) {
+    const postData = async (url, data) => {
+        const res = await this.fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-type' : 'application/json'
+            },
+            body: data
+        });
+
+
+
+        return await res.json();
+    };
+
+    function bindPostData(form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
 
@@ -246,28 +271,21 @@ window.addEventListener('DOMContentLoaded', function () {
             display: block;
             margin: 0 auto;`;
 
-            //form.append(statusMessage);
             form.insertAdjacentElement('afterend', statusMessage);
 
             const formData = new FormData(form);
 
-            const object = {};
-            formData.forEach(function (value, key) {
-                object[key] = value;
-            });
+            // entries, fromEntries - check use in old browser !!!!!!
 
-            fetch('server.php', {
-                method: "POST",
-                headers: {
-                    'Content-type': 'application/json; charset=utf-8'
-                },
-                body: JSON.stringify(object)
-            })
-                .then(data => data.text())
+            const json = JSON.stringify(Object.fromEntries(formData.entries()));
+
+            const obj = {a : 23, b: 50};
+            console.log(Object.entries(obj));
+            postData('http://localhost:3000/requests', json)
                 .then(data => {
                     console.log(data);
                     showThancksModal(message.success);
-                    form.reset();
+                    //form.reset();
                     statusMessage.remove();
                 }).catch(() => {
                     showThancksModal(message.failure);
