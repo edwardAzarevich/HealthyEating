@@ -193,7 +193,7 @@ window.addEventListener('DOMContentLoaded', function () {
             this.parent.append(element);
         }
     }
-    
+
     const getResourse = async (url) => {
         const res = await this.fetch(url);
 
@@ -212,11 +212,11 @@ window.addEventListener('DOMContentLoaded', function () {
     //     });
 
     axios.get('http://localhost:3000/menu')
-    .then(data=> {
-                 data.data.forEach(({img, alting, title, descr, price }) => {
-                     new MenuCard(img, alting, title, descr, price, '.menu .container').render();
-                });
+        .then(data => {
+            data.data.forEach(({ img, alting, title, descr, price }) => {
+                new MenuCard(img, alting, title, descr, price, '.menu .container').render();
             });
+        });
 
     // Forms
 
@@ -235,7 +235,7 @@ window.addEventListener('DOMContentLoaded', function () {
         const res = await this.fetch(url, {
             method: 'POST',
             headers: {
-                'Content-type' : 'application/json'
+                'Content-type': 'application/json'
             },
             body: data
         });
@@ -265,7 +265,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
             const json = JSON.stringify(Object.fromEntries(formData.entries()));
 
-            const obj = {a : 23, b: 50};
+            const obj = { a: 23, b: 50 };
             console.log(Object.entries(obj));
             postData('http://localhost:3000/requests', json)
                 .then(data => {
@@ -308,4 +308,63 @@ window.addEventListener('DOMContentLoaded', function () {
     this.fetch('http://localhost:3000/menu')
         .then(data => data.json())
         .then(res => console.log(res));
+
+
+    //slader
+
+    const sliderCounterPrev = this.document.querySelector('.offer__slider-prev'),
+        sliderCounterNext = this.document.querySelector('.offer__slider-next'),
+        current = this.document.querySelector('.offer__slider-counter #current'),
+        sliderWrapper = this.document.querySelectorAll('.offer__slider-wrapper'),
+        sliderWrapperItem = sliderWrapper[0].querySelectorAll('.offer__slide');
+
+    let indexCurrent = 1;
+
+    function showWrapper(index, selector) {
+        let i = 1;
+        selector.forEach(item => {
+            if (i === index) {
+                item.classList.remove('hide');
+                item.classList.add('show');
+                console.log(item);
+            } else {
+                item.classList.add('hide');
+                item.classList.remove('show');
+            }
+            i = i + 1;
+        });
+
+    };
+
+
+    sliderWrapperItem.forEach(item => {
+        if (indexCurrent !== Number(current.textContent)) {
+            item.classList.add('hide');
+            item.classList.remove('show');
+        }
+        indexCurrent = indexCurrent + 1;
+    });
+
+    sliderCounterPrev.addEventListener('click', () => {
+        const maxValue = this.document.querySelector('.offer__slider-counter #total'),
+            current = this.document.querySelector('.offer__slider-counter #current');
+        let valueCurrent = Number(current.textContent);
+        valueCurrent === 1 ? valueCurrent = Number(maxValue.textContent) : valueCurrent--;
+
+        showWrapper(valueCurrent, sliderWrapperItem);
+        current.textContent = `0${valueCurrent}`;
+    });
+
+    sliderCounterNext.addEventListener('click', () => {
+        const maxValue = this.document.querySelector('.offer__slider-counter #total'),
+            current = this.document.querySelector('.offer__slider-counter #current')
+
+        let valueCurrent = Number(current.textContent);
+        valueCurrent === Number(maxValue.textContent) ? valueCurrent = 1 : valueCurrent++;
+
+
+        showWrapper(valueCurrent, sliderWrapperItem);
+        current.textContent = `0${valueCurrent}`;
+    });
+
 });
