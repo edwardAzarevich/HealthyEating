@@ -140,7 +140,7 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    const modalTimerId = setTimeout(openModal, 300000);
+    const modalTimerId = setTimeout(openModal, 3000000);
     // Изменил значение, чтобы не отвлекало
 
     function showModalByScroll() {
