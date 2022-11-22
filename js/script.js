@@ -269,7 +269,7 @@ window.addEventListener('DOMContentLoaded', function () {
             console.log(Object.entries(obj));
             postData('http://localhost:3000/requests', json)
                 .then(data => {
-                    console.log(data);
+                    //console.log(data);
                     showThancksModal(message.success);
                     //form.reset();
                     statusMessage.remove();
@@ -401,12 +401,15 @@ window.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    const deleteNotDigits = (str) => {
+        return +str.replace(/\D/g, '');
+    }
 
     next.addEventListener('click', () => {
-        if (offset == +width.slice(0, width.length - 2) * (slides.length - 1)) {
+        if (offset == deleteNotDigits(width) * (slides.length - 1)) {
             offset = 0;
         } else {
-            offset += +width.slice(0, width.length - 2);
+            offset += deleteNotDigits(width);
         };
 
         slidesField.style.transform = `translateX(-${offset}px)`;
@@ -423,9 +426,9 @@ window.addEventListener('DOMContentLoaded', function () {
 
     prev.addEventListener('click', () => {
         if (offset == 0) {
-            offset = +width.slice(0, width.length - 2) * (slides.length - 1)
+            offset = deleteNotDigits(width) * (slides.length - 1)
         } else {
-            offset -= +width.slice(0, width.length - 2);
+            offset -= deleteNotDigits(width);
         };
         slidesField.style.transform = `translateX(-${offset}px)`;
 
@@ -445,7 +448,7 @@ window.addEventListener('DOMContentLoaded', function () {
             const slideTo = e.target.getAttribute('data-slide-to');
 
             slideIndex = slideTo;
-            offset = +width.slice(0, width.length - 2) * (slideTo - 1);
+            offset = deleteNotDigits(width) * (slideTo - 1);
 
             slidesField.style.transform = `translateX(-${offset}px)`;
 
