@@ -1,6 +1,6 @@
 'use strict';
 
-const ans = prompt('write your number');
+//const ans = prompt('write your number');
 
 //const reg = /n/ig;
 
@@ -18,7 +18,7 @@ const ans = prompt('write your number');
 
 const str = 'My name is R2D2';
 
-console.log(str.match(/\w\d\w\d/i));
+console.log('convert me please'.replace(/ /g, '_'))
 
 // \D
 // \W
