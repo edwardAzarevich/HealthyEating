@@ -1,30 +1,60 @@
 'use strict';
 
-//const ans = prompt('write your number');
+class R {
 
-//const reg = /n/ig;
+}
+
+class Rectangle {
+    constructor(props) {
+        this.name = props.name;
+        this.height = props.height;
+        this.width = props.width;
+    }
+
+    static type = "Reactangle";
+
+    sayName = () => {
+        console.log(`Hi ${this.name}`);
+    }
+
+    get area() {
+        return this.height * this.width;
+    }
+
+    set area(value) {
+        this._area = value;
+    }
+
+    // get style() {
+    //     this.#style = #style;
+    // }
+}
+
+class Square extends Rectangle {
+    say = () => {
+        console.log(this.name, this.height, this.width);
+    }
+
+}
+
+const s = new Square({
+    width: 200,
+    height: 200,
+    name: 'Sqyare'
+});
+
+s.sayName();
+console.log(s.type);
+console.log(s.area);
+
+const myModule = require('./test3');
+
+const myModuleInstance = new myModule();
+
+myModuleInstance.goodbye();
+myModuleInstance.hello();
 
 
-// console.log(ans.search(reg));
-// console.log(ans.match(reg));
+// const str = 'My name is R2D2';
 
-// const pass = prompt('Password');
-
-// console.log(pass.replace(/./g, "*"));
-
-// console.log('12-34-56'.replace(/-/g, ':'));
-// const reg = /\d/g;
-// console.log(ans.match(reg));
-
-const str = 'My name is R2D2';
-
-console.log('convert me please'.replace(/ /g, '_'))
-
-// \D
-// \W
-
-
-// \d
-// \w
-// \s
-
+// console.log('convert me please'.replace(/ /g, '_'))
