@@ -1,3 +1,5 @@
+import { getResourse } from '../services/serveces';
+
 function cards() {
     // Используем классы для создание карточек меню
 
@@ -42,15 +44,7 @@ function cards() {
         }
     }
 
-    const getResourse = async (url) => {
-        const res = await fetch(url);
 
-        if (!res.ok) {
-            throw new Error(`Could bot fetch ${url}, status: ${res.status}`);
-        };
-
-        return await res.json();
-    };
 
     getResourse('http://localhost:3000/menu',)
         .then(data => {
@@ -67,4 +61,4 @@ function cards() {
     //     });
 }
 
-module.exports = cards;
+export default cards;
