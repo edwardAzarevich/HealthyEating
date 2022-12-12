@@ -12,18 +12,30 @@
   },
   "author": "Edward",
   "license": "ISC",
+  "browserslist": [
+    "> 1%"
+  ],
   "bugs": {
     "url": "https://github.com/edwardAzarevich/CursesUdemyJsBasic/issues"
   },
   "homepage": "https://github.com/edwardAzarevich/CursesUdemyJsBasic#readme",
   "devDependencies": {
+    "@babel/cli": "^7.19.3",
+    "@babel/core": "^7.20.5",
+    "@babel/preset-env": "^7.20.2",
+    "babel-loader": "^9.1.0",
+    "core-js": "^3.26.1",
+    "corejs": "^1.0.0",
     "json-server": "^0.17.0",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.12.1",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "express": "^4.18.2"
+    "es6-promise": "^4.2.8",
+    "express": "^4.18.2",
+    "nodelist-foreach-polyfill": "^1.2.0"
   }
 }
