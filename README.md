@@ -30,5 +30,7 @@ If needed, change your selection and recalculate.
 Example Usage
 Select "Salad" (150 calories) and "Chicken" (250 calories).
 Click "Calculate" to see the total calories: 400 calories.
-Contributing
+
+# Contributing
+
 If you would like to contribute to this project, please open an issue or create a pull request.
